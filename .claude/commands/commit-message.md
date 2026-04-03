@@ -3,10 +3,6 @@ description: Create a commit message by analyzing git diffs
 allowed-tools: Bash(git status:*), Bash(git diff --staged), Bash(git commit:*)
 ---
 
-## Your task:
-
-Analyze above staged changes and create a commit message. Use present tense and explain "why" something has changed, not just "what" has changed.
-
 ## Run these commands:
 
 ```bash
@@ -14,16 +10,19 @@ git status
 git diff --staged
 ```
 
-## Commit types with emojis:
+## Your task:
 
-Only use the following emojis:
+Analyze above staged git changes and create a commit message. Use present tense and explain "why" something has changed, not just "what" has changed.
+
+## Commit types with emojis:
+Only use the following emojis: 
 
 - ✨ `feat:` - New feature
-- 🪲 `fix:` - Bug fix
+- 🐛 `fix:` - Bug fix
 - 🔨 `refactor:` - Refactoring code
 - 📝 `docs:` - Documentation
 - 🎨 `style:` - Styling/formatting
-- 🧪 `test:` - Tests
+- ✅ `test:` - Tests
 - ⚡ `perf:` - Performance
 
 ## Format:
@@ -41,5 +40,3 @@ Use the following format for making the commit message:
 3. Ask for confirmation before committing
 
 DO NOT auto-commit - wait for user approval, and only commit if the user says so.
-
-
