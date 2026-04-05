@@ -1,21 +1,22 @@
-import type { Metadata } from "next"
-import "@/app/globals.css"
+import type { Metadata } from "next";
+import "@/app/globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Pocket Heist",
   description: "Tiny missions. Big office mischief.",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
-  )
+  );
 }
