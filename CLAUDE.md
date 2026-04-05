@@ -50,3 +50,7 @@ Reusable components live in `components/<ComponentName>/` with an `index.ts` bar
 ### Testing
 
 Tests live in `tests/` and mirror the `components/` structure. Uses Vitest + React Testing Library with `jsdom`. Test globals (`describe`, `it`, `expect`) are enabled — no explicit imports needed for those. Page-level tests are not currently in scope — tests cover reusable components only.
+
+## Checking Documentation 
+
+- **IMPORTANT:** When implementing any library or framework specific features, ALWAYS check the appropriate library or framework documentation using the Context7 MCP Server before writing any code.
