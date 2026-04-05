@@ -1,6 +1,10 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 
 import AuthForm from "@/components/AuthForm";
@@ -9,6 +13,7 @@ vi.mock("@/lib/firebase", () => ({ auth: {}, db: {} }));
 vi.mock("firebase/auth", () => ({
   createUserWithEmailAndPassword: vi.fn(),
   updateProfile: vi.fn(),
+  signInWithEmailAndPassword: vi.fn(),
 }));
 vi.mock("firebase/firestore", () => ({
   setDoc: vi.fn(),
@@ -24,6 +29,7 @@ vi.mock("@/lib/codename", () => ({
 const mockCreateUser = vi.mocked(createUserWithEmailAndPassword);
 const mockUpdateProfile = vi.mocked(updateProfile);
 const mockSetDoc = vi.mocked(setDoc);
+const mockSignIn = vi.mocked(signInWithEmailAndPassword);
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -66,6 +72,90 @@ describe("AuthForm", () => {
     fireEvent.change(passwordInput, { target: { value: "secret123" } });
     fireEvent.click(toggleButton);
     expect(passwordInput.value).toBe("secret123");
+  });
+});
+
+describe("AuthForm login", () => {
+  function fillAndSubmitLogin() {
+    render(<AuthForm mode="login" />);
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText("Password"), {
+      target: { value: "password123" },
+    });
+    fireEvent.submit(
+      screen.getByRole("button", { name: "Log In" }).closest("form")!,
+    );
+  }
+
+  it("calls signInWithEmailAndPassword with entered credentials", async () => {
+    mockSignIn.mockResolvedValue({} as never);
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect(mockSignIn).toHaveBeenCalledWith(
+        {},
+        "test@example.com",
+        "password123",
+      );
+    });
+  });
+
+  it("shows an inline success message after successful login", async () => {
+    mockSignIn.mockResolvedValue({} as never);
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect(screen.getByText("You're logged in!")).toBeDefined();
+    });
+  });
+
+  it("clears both fields after successful login", async () => {
+    mockSignIn.mockResolvedValue({} as never);
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect((screen.getByLabelText("Email") as HTMLInputElement).value).toBe(
+        "",
+      );
+      expect(
+        (screen.getByLabelText("Password") as HTMLInputElement).value,
+      ).toBe("");
+    });
+  });
+
+  it("shows a specific error for invalid credentials", async () => {
+    mockSignIn.mockRejectedValue({ code: "auth/invalid-credential" });
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect(screen.getByText("Incorrect email or password.")).toBeDefined();
+    });
+  });
+
+  it("shows a generic error for non-credential failures", async () => {
+    mockSignIn.mockRejectedValue({ code: "auth/network-request-failed" });
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect(
+        screen.getByText("Something went wrong. Please try again."),
+      ).toBeDefined();
+    });
+  });
+
+  it("disables the submit button while login is in progress", async () => {
+    mockSignIn.mockReturnValue(new Promise(() => {}));
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "Logging in…" }),
+      ).toHaveProperty("disabled", true);
+    });
+  });
+
+  it("shows loading text on button while login is in progress", async () => {
+    mockSignIn.mockReturnValue(new Promise(() => {}));
+    fillAndSubmitLogin();
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Logging in…" })).toBeDefined();
+    });
   });
 });
 
@@ -136,10 +226,9 @@ describe("AuthForm signup", () => {
     fillAndSubmit();
 
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Sign Up" })).toHaveProperty(
-        "disabled",
-        true,
-      );
+      expect(
+        screen.getByRole("button", { name: "Signing up…" }),
+      ).toHaveProperty("disabled", true);
     });
   });
 });

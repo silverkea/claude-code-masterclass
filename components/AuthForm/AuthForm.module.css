@@ -31,3 +31,7 @@
 .error {
   @apply text-error text-sm;
 }
+
+.success {
+  @apply text-success text-sm;
+}

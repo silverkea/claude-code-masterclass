@@ -4,7 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { generateCodename } from "@/lib/codename";
@@ -18,6 +22,9 @@ function getErrorMessage(code: string): string {
   if (code === "auth/email-already-in-use") {
     return "An account with this email already exists.";
   }
+  if (code === "auth/invalid-credential") {
+    return "Incorrect email or password.";
+  }
   return "Something went wrong. Please try again.";
 }
 
@@ -26,6 +33,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const isLogin = mode === "login";
@@ -33,10 +41,23 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
+    setSubmitting(true);
 
-    if (!isLogin) {
-      setSubmitting(true);
-      setError(null);
+    if (isLogin) {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setEmail("");
+        setPassword("");
+        setSuccess("You're logged in!");
+      } catch (err: unknown) {
+        const code = (err as { code?: string }).code ?? "";
+        setError(getErrorMessage(code));
+      } finally {
+        setSubmitting(false);
+      }
+    } else {
       try {
         const credential = await createUserWithEmailAndPassword(
           auth,
@@ -102,9 +123,16 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
+      {success && <p className={styles.success}>{success}</p>}
 
       <button type="submit" className="btn" disabled={submitting}>
-        {isLogin ? "Log In" : "Sign Up"}
+        {submitting
+          ? isLogin
+            ? "Logging in…"
+            : "Signing up…"
+          : isLogin
+            ? "Log In"
+            : "Sign Up"}
       </button>
 
       <Link href={isLogin ? "/signup" : "/login"} className={styles.switchLink}>
