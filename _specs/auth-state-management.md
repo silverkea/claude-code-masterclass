@@ -1,46 +1,61 @@
-# Spec for auth-state-management
+# Spec for Auth State Management
 
 branch: claude/feature/auth-state-management
 figma_component (if used): N/A
 
+## User Story
+
+As a logged-in user, I want the app to know I'm signed in as I move between pages so that I don't have to keep authenticating and see the right content for my account.
+
+## Trigger
+
+User opens or navigates within the app.
+
 ## Summary
 
-Add a global, realtime Firebase auth state listener that exposes the current authenticated user (or `null` if logged out) through a `useUser` hook. The hook should be available to any page or component in the app without prop drilling.
+Make the current user's authentication state available across the entire app in real time. Any page or component can know whether a user is logged in, who they are, and whether that information is still loading. The navbar reflects the logged-in user's identity, and the splash page redirects based on auth state.
 
 ## Functional Requirements
 
-- Create an `AuthProvider` React context provider that sets up a single `onAuthStateChanged` Firebase listener on mount and tears it down on unmount
-- The provider should hold the current `User | null` value and a `loading` boolean that is `true` until the first auth state is resolved
-- Create a `useUser` hook that reads from the `AuthProvider` context and returns `{ user, loading }`
-- Mount `AuthProvider` in the root layout (`app/layout.tsx`) so it wraps the entire app
-- Update `Navbar` to consume `useUser` — display the logged-in user's display name or email when a user is present (no login/logout actions required yet)
-- Update the splash page (`app/(public)/page.tsx`) to consume `useUser` — redirect to `/heists` if a user is present, or `/login` if not, once loading is resolved
+- The app tracks whether a user is logged in across all pages without requiring each page to independently check
+- Any page or component can access the current logged-in user and whether auth state has finished loading
+- While the auth state is being determined on load, a loading indicator is shown in place of user-specific content
+- The navbar displays the logged-in user's name or identifier when a user is signed in, and shows nothing user-specific when signed out
+- The splash page redirects to the dashboard if a user is logged in, or to the login page if not — only after the auth state has finished loading
+- When auth state changes (e.g. user signs in or out), all affected parts of the app update automatically
 
-## Possible Edge Cases
+## Success Criteria
 
-- The auth state is asynchronous on first load — components must handle the `loading` state and not render user-dependent UI until it resolves
-- `AuthProvider` must be a client component since it uses Firebase and React state, but `app/layout.tsx` is a server component — the provider must be extracted into its own client component file and imported into the layout
-- `onAuthStateChanged` returns an unsubscribe function — it must be called on unmount to prevent memory leaks
+- A logged-in user who navigates to the splash page is redirected to the dashboard without seeing a flash of the public page
+- A logged-out user who navigates to the splash page is redirected to the login page
+- The navbar shows the logged-in user's name or identifier while signed in
+- The navbar shows nothing user-specific while signed out
+- A brief loading state is shown while the app determines auth status on first load
+
+## Edge Cases & Constraints
+
+- Auth state is not immediately known on first load — user-specific UI must not be rendered until it is resolved to avoid incorrect content flashing
+- Signing in or out must update all relevant parts of the app without requiring a page reload
+- Memory must not leak if the user navigates away before auth state resolves
 
 ## Acceptance Criteria
 
-- `useUser` returns `{ user: null, loading: false }` when no user is signed in
-- `useUser` returns `{ user: User, loading: false }` when a user is signed in
-- `useUser` returns `{ loading: true }` before the first auth state event fires
-- `AuthProvider` is mounted once at the app root and does not cause re-renders of unrelated components on auth state changes
-- `Navbar` renders the user's display name or email when logged in, and nothing user-specific when logged out
-- Splash page redirects correctly based on auth state once loading is complete
-- Calling `useUser` outside of `AuthProvider` throws a descriptive error
+- Given the user is signed in, when they visit the splash page, they are redirected to the dashboard
+- Given the user is signed out, when they visit the splash page, they are redirected to the login page
+- Given auth state is still loading, user-specific UI shows a placeholder rather than incorrect content
+- Given the user is signed in, the navbar displays their name or identifier
+- Given the user is signed out, the navbar displays no user-specific content
+- Accessing the auth state outside of the auth provider throws a descriptive error
 
 ## Open Questions
 
-- Should `loading` state in `Navbar` show a skeleton/placeholder, or simply render nothing until resolved? skeleton/placeholder 
+- Should the loading placeholder in the navbar be a skeleton element or simply empty space? **Decision: skeleton/placeholder**
 
 ## Testing Guidelines
 
-Create a test file in `./tests` for the new feature, covering the following cases without going too heavy:
+Create a test file in ./tests for the new feature, covering the following cases:
 
-- `useUser` throws when used outside of `AuthProvider`
-- `useUser` returns `{ user: null, loading: false }` when auth state resolves to no user
-- `useUser` returns `{ user: mockUser, loading: false }` when auth state resolves to a signed-in user
-- `loading` is `true` before the first `onAuthStateChanged` callback fires
+- Accessing auth state outside the provider throws a descriptive error
+- Auth state returns no user when signed out
+- Auth state returns the correct user when signed in
+- Loading state is true before auth state has been resolved

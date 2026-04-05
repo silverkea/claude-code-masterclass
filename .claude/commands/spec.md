@@ -1,7 +1,7 @@
 ---
 description: Create a feature spec file and branch from a short idea
 argument-hint: "[Short feature description, optional: 'figma: <component-link>']"
-allowed-tools: Read, Write, Glob, Bash(git switch:*)
+allowed-tools: Read, Write, Glob, Grep, Bash(git switch:*), Bash(git status:*), Bash(git branch:*)
 ---
 
 You are helping to spin up a new feature spec for this application, from a short idea provided in the user input below. Always adhere to any rules or requirements set out in any CLAUDE.md files when responding.
@@ -50,7 +50,7 @@ From `$ARGUMENTS`, extract:
 4. `figma_hint` (optional)
    - If `$ARGUMENTS` contains the substring `figma:`
    - Then the text after `figma:` is the figma component link.
-   - Tim whitespace.
+   - Trim whitespace.
    - Example input:
       - `/spec Card component, figma: https://www.figma.com/design/some-link`
       - `figma_hint` becomes `https://www.figma.com/design/some-link`
@@ -58,9 +58,9 @@ From `$ARGUMENTS`, extract:
 
 If you cannot infer a sensible `feature_title` and `feature_slug`, ask the user to clarify instead of guessing.
 
-## Step 2.5 Pull Figma context when needed
+## Step 3. Pull Figma context when needed
 
-If `figma_hit` is present and Figma MCP tools are available:
+If `figma_hint` is present and Figma MCP tools are available:
 
 1. Use the Figma MCP tools to locate the component, layer or frame.
 2. Extract only information that is useful for implementation, such as:
@@ -69,26 +69,76 @@ If `figma_hit` is present and Figma MCP tools are available:
    - Color tokens and semantic usage (primary, surface, border, error etc.)
    - Border radius, shadows, and any notable visual detail
    - Icons, buttons, links or other UI elements
-3. Summarise thsi as 3 to 8 concise bullet points and also leave a link t the figma component for future lookups
+3. Summarise this as 3 to 8 concise bullet points and also leave a link to the figma component for future lookups
 4. If lookup fails or the tools are not available, record a note like:
    - `"Design reference could not be retrieved. See Figma manually for details"`
 
-Alwasy summarise into human friendly notes.
+Always summarise into human friendly notes.
 
-## Step 3. Switch to a new Git branch
+## Step 4. Clarification questions
+
+Before writing anything, identify what is genuinely ambiguous or unknown about this feature and ask the user about those things — **one question at a time**. Wait for an answer before asking the next. Do not batch questions together.
+
+Use judgment to decide which questions are worth asking. Skip anything already clearly answered by the user's input or obvious from the codebase context. Ask as many or as few questions as the feature warrants — some features need 2 questions, others may need 7 or more.
+
+For each question, present **numbered options** the user can pick from, plus an explicit last option of "Other – type your own". Make the options feel specific and relevant to this feature, not generic. Where it makes sense, include a "Not sure / skip" option so the user can move on.
+
+The following are **example question areas** to draw from — use whichever apply and add others that make sense for the feature:
+
+- **User Story** — Who is the human user this feature adds value to, what do they want to do, and why? Use the format: "As a [user], I want [action] so that [value]." The user is always a person (e.g. logged-in user, guest, admin) — even if the feature is triggered by a system or scheduled process, write the story from the perspective of the human who benefits.
+- **Happy path outcome** — What does success look like from the user's perspective?
+- **Out of scope** — What should this feature explicitly NOT do?
+- **Error & edge cases** — What failure states or validation rules are already known?
+- **Existing patterns to follow** — Which components, hooks, or flows should this reuse or be consistent with?
+- **Trigger** — What initiates this feature? Describe it in plain, non-technical language. Examples: "User clicks the save button", "Nightly scheduled job at 2am", "Payment provider sends a completed payment notification". Avoid technical terms like "cron", "webhook", "event listener", "API call" — describe the real-world action instead.
+- **Data involved** — What data does this feature read or write, and where does it come from?
+- **Permissions or auth requirements** — Does this feature behave differently depending on auth state?
+- **Destruction or irreversibility** — Does this feature delete or mutate anything that can't be undone?
+- **Dependencies or blockers** — Does this depend on another feature being built first?
+
+After all answers are collected, proceed to Step 5.
+
+## Step 5. Switch to a new Git branch
 
 Before making any content, switch to a new Git branch using the `branch_name` derived from the `$ARGUMENTS`. If the branch name is already taken, then append a version number to it: e.g. `claude/feature/card-component-01`
 
-## Step 4. Draft the spec content
+## Step 6. Draft the spec content
 
-Create a markdown spec document that Plan mode can use directly and save it in the _specs folder using the `feature_slug`. Use the exact structure as defined in the spec template file here: @_specs/template.md. Do not add technical implementation details such as code examples.
+**6a. Read existing specs for consistency and overlap**
+Read the existing files in `_specs/` to:
+- Calibrate the tone, depth, and level of detail used in this project — match that style in the new spec
+- Check whether any existing spec covers behaviour that overlaps with or is superseded by this new feature. If so, note this explicitly in the new spec under a `## Related Specs` section, and flag to the user in the final output that those specs may need updating.
 
-## Step 5. Final output to the user
+**6b. Write the draft**
+Create a markdown spec document using the exact structure defined in: @_specs/template.md
+
+The spec must stay at the **functional and non-functional requirements** level — it describes *what* the feature does and *why*, from a user and product perspective. It is not a technical document.
+
+Specifically:
+- Do NOT reference specific function names, API calls, SDK methods, file paths, component names, or implementation details — this includes the `trigger` field: describe the real-world action, not the technical mechanism (e.g. "Nightly scheduled job at 2am" not "cron job", "Payment provider sends a completed payment notification" not "webhook")
+- DO describe user-facing behaviour, business rules, constraints, and acceptance criteria in plain language
+- A passing test for this: could a non-developer product manager read this spec and fully understand what needs to be built?
+
+Use the answers from the clarification questions to populate the spec sections. Any question the user skipped or answered with uncertainty (e.g. "not sure", "none known yet") should be carried forward into the **Open Questions** section so unresolved decisions are explicitly documented.
+
+**6c. Self-check before saving**
+Before writing the file to disk, review the draft and verify:
+- No section is left as `...` or contains only a single vague line
+- Acceptance Criteria has at least 3 specific, independently testable statements
+- Open Questions captures anything genuinely unresolved
+- The spec contains no technical implementation details (function names, file paths, SDK references)
+
+Fix any gaps before saving.
+
+## Step 7. Final output to the user
 
 After the file is saved, respond to the user with a short summary in this exact format:
 
 Branch: <branch_name>
-Spec file: specs/<feature_slug>.md
+Spec file: _specs/<feature_slug>.md
 Title: <feature_title>
+Related specs: <comma-separated list of affected spec files, or "None">
+
+If any related specs were identified, add a short note below the summary listing which specs may need updating before implementation begins.
 
 Do not repeat the full spec in the chat output unless the user explicitly asks to see it. The main goal is to save the spec file and report where it lives and what branch name to use.
