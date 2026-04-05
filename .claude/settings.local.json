@@ -22,7 +22,9 @@
       "mcp__firebase__firebase_get_sdk_config",
       "Bash(npm i:*)",
       "Bash(node -e ':*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "mcp__figma-desktop__get_metadata",
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")"
     ]
   }
 }

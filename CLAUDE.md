@@ -78,12 +78,12 @@ The following are exempt from this rule:
 
 For everything else — new features, changes to existing behaviour, non-trivial additions — the process is:
 1. Create a spec with `/spec` first
-2. Enter plan mode, produce a plan from the spec, then offer to save it to `_plans/<feature-slug>.md`
+2. Enter plan mode, produce a plan from the spec, and save it to `_plans/<feature-slug>.md`
 3. Implement against the plan
 
 ### Saving Plans
 
-When a plan has been presented in plan mode, always offer the user the option to save it to `_plans/<feature-slug>.md` before implementation begins. The plan file is the technical complement to the spec — where the spec describes what and why, the plan describes how. Saved plans can be referred back to during implementation without repeating context.
+When a plan has been produced in plan mode, always save it to `_plans/<feature-slug>.md` before exiting plan mode. This is mandatory — do not exit plan mode or begin implementation without saving the plan file first. The plan file is the technical complement to the spec — where the spec describes what and why, the plan describes how. Saved plans can be referred back to during implementation without repeating context.
 
 ### Keeping Specs Up To Date
 
