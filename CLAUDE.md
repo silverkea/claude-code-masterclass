@@ -103,6 +103,9 @@ The `_backlog/` folder captures observations, inconsistencies, and gaps noticed 
 
 Backlog items can be created at any point — not just during the spec flow. During implementation, if technical debt is spotted, ask the user whether they want to capture it before moving on.
 
+**Backlog vs Open Questions:**
+Backlog items are for gaps or observations about *other* features that are out of scope for the current work. Open Questions in a spec are for unresolved decisions about *this* feature that must be answered before or during implementation. If something spotted during spec work relates to a different feature or a future need, it belongs in the backlog — not in Open Questions.
+
 **How to create a backlog item:**
 - Always ask the user first — do not silently create backlog files
 - Name the file: `yyyymmdd-<slug>.md` (e.g. `20260405-signup-login-redirect-consistency.md`)
