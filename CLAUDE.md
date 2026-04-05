@@ -13,6 +13,9 @@ npx vitest run    # Run tests once (no watch)
 npx vitest run tests/components/Navbar.test.tsx  # Run a single test file
 ```
 
+## Packages
+All packages MUST be referenced as specific pinned versions.
+
 ## Architecture
 
 **Pocket Heist** is a Next.js 16 app (App Router) with React 19 and Tailwind CSS v4.
