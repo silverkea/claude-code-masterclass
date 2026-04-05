@@ -27,3 +27,7 @@
 .switchLink {
   @apply text-body text-sm text-center hover:text-primary transition-colors;
 }
+
+.error {
+  @apply text-error text-sm;
+}

@@ -21,7 +21,8 @@
       "Bash(npm view:*)",
       "mcp__firebase__firebase_get_sdk_config",
       "Bash(npm i:*)",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(xargs grep:*)"
     ]
   }
 }

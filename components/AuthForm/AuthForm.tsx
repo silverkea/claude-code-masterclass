@@ -2,23 +2,61 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { generateCodename } from "@/lib/codename";
 import styles from "./AuthForm.module.css";
 
 type AuthFormProps = {
   mode: "login" | "signup";
 };
 
+function getErrorMessage(code: string): string {
+  if (code === "auth/email-already-in-use") {
+    return "An account with this email already exists.";
+  }
+  return "Something went wrong. Please try again.";
+}
+
 export default function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const isLogin = mode === "login";
+  const router = useRouter();
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log({ email, password });
+
+    if (!isLogin) {
+      setSubmitting(true);
+      setError(null);
+      try {
+        const credential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password,
+        );
+        const codename = generateCodename();
+        await updateProfile(credential.user, { displayName: codename });
+        await setDoc(doc(db, "users", credential.user.uid), {
+          id: credential.user.uid,
+          codename,
+        });
+        router.push("/heists");
+      } catch (err: unknown) {
+        const code = (err as { code?: string }).code ?? "";
+        setError(getErrorMessage(code));
+      } finally {
+        setSubmitting(false);
+      }
+    }
   }
 
   return (
@@ -63,7 +101,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </div>
       </div>
 
-      <button type="submit" className="btn">
+      {error && <p className={styles.error}>{error}</p>}
+
+      <button type="submit" className="btn" disabled={submitting}>
         {isLogin ? "Log In" : "Sign Up"}
       </button>
 
