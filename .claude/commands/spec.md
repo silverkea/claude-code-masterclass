@@ -1,7 +1,7 @@
 ---
 description: Create a feature spec file and branch from a short idea
 argument-hint: "[Short feature description, optional: 'figma: <component-link>']"
-allowed-tools: Read, Write, Glob, Grep, Bash(git switch:*), Bash(git status:*), Bash(git branch:*)
+allowed-tools: Read, Write, Glob, Grep, Bash(git switch:*), Bash(git status:*), Bash(git branch:*), Bash(git rm:*)
 ---
 
 You are helping to spin up a new feature spec for this application, from a short idea provided in the user input below. Always adhere to any rules or requirements set out in any CLAUDE.md files when responding.
@@ -56,6 +56,11 @@ From `$ARGUMENTS`, extract:
       - `figma_hint` becomes `https://www.figma.com/design/some-link`
 
 
+5. `backlog_ref` (optional)
+   - If `$ARGUMENTS` references a file in `_backlog/` (e.g. "refer to _backlog/20260405-foo.md" or just a backlog filename), treat it as the source for this spec.
+   - Read the backlog file and use its **Observation**, **Why It Matters**, and **Possible Resolutions** to pre-populate the spec context — these inform the clarification questions and the spec content.
+   - Store the backlog file path so it can be deleted after the spec is saved.
+
 If you cannot infer a sensible `feature_title` and `feature_slug`, ask the user to clarify instead of guessing.
 
 ## Step 3. Pull Figma context when needed
@@ -108,6 +113,7 @@ Before making any content, switch to a new Git branch using the `branch_name` de
 Read the existing files in `_specs/` to:
 - Calibrate the tone, depth, and level of detail used in this project — match that style in the new spec
 - Check whether any existing spec covers behaviour that overlaps with or is superseded by this new feature. If so, note this explicitly in the new spec under a `## Related Specs` section, and flag to the user in the final output that those specs may need updating.
+- Look for **behavioural inconsistencies** between related features that are *not* being changed by this feature (e.g. one feature redirects on success, a parallel feature does not). For each inconsistency spotted, ask the user **one at a time** with a question that includes: what the inconsistency is, why it could matter to users or the codebase, and what the suggested resolution might be — so the user has enough context to decide whether it's worth capturing. Example: "I noticed that signup redirects to the dashboard on success, but login (this feature) shows an inline message and stays on the page. This means returning users have a different post-authentication experience than new users. Possible resolutions include: aligning login to redirect like signup, aligning signup to show an inline message like login, or leaving them intentionally different if the product requires distinct post-auth flows. Would you like to capture this in the backlog?" If yes, create a backlog file named `yyyymmdd-<slug>.md` in `_backlog/` following the format in CLAUDE.md. If no, move on.
 
 **6b. Write the draft**
 Create a markdown spec document using the exact structure defined in: @_specs/template.md
@@ -130,6 +136,9 @@ Before writing the file to disk, review the draft and verify:
 
 Fix any gaps before saving.
 
+**6d. Delete the backlog item if applicable**
+If this spec was created from a `backlog_ref`, delete the backlog file using `git rm` once the spec file has been successfully saved. The spec supersedes it — the backlog item no longer needs to exist.
+
 ## Step 7. Final output to the user
 
 After the file is saved, respond to the user with a short summary in this exact format:
@@ -138,6 +147,7 @@ Branch: <branch_name>
 Spec file: _specs/<feature_slug>.md
 Title: <feature_title>
 Related specs: <comma-separated list of affected spec files, or "None">
+Backlog item removed: <backlog filename, or "N/A">
 
 If any related specs were identified, add a short note below the summary listing which specs may need updating before implementation begins.
 

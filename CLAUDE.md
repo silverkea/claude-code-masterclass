@@ -92,6 +92,30 @@ Specs should reflect current intended behaviour, not just historical intent. To 
 - **Before planning any change**, scan `_specs/` for specs that cover the affected area. If the planned work changes or extends behaviour described in an existing spec, updating that spec must be the first step of the plan — before any implementation steps.
 - **When creating a new spec**, check whether it overlaps with or supersedes any existing specs and note this explicitly.
 
+### Backlog
+
+The `_backlog/` folder captures observations, inconsistencies, and gaps noticed during feature work that are out of scope for the current feature. It is not a task list — it is a deferred observation queue that informs future specs.
+
+**When to create a backlog item:**
+- During spec creation or planning, when a behavioural inconsistency is spotted in a related feature that is not being changed by the current work
+- During implementation or code review, when technical debt is noticed that is out of scope to fix right now (e.g. a pattern that should be refactored, a missing abstraction, a shortcut taken under time pressure)
+- When a gap or improvement is noticed that clearly belongs in a future feature
+
+Backlog items can be created at any point — not just during the spec flow. During implementation, if technical debt is spotted, ask the user whether they want to capture it before moving on.
+
+**How to create a backlog item:**
+- Always ask the user first — do not silently create backlog files
+- Name the file: `yyyymmdd-<slug>.md` (e.g. `20260405-signup-login-redirect-consistency.md`)
+- Save it to `_backlog/`
+
+**What a backlog item should contain:**
+- Type: `inconsistency`, `tech-debt`, or `improvement`
+- What was observed
+- Why it matters
+- Which specs, features, or files it relates to
+- Possible resolutions — list the realistic options, not just one answer. This is not a spec, so keep them brief, but capturing the trade-offs helps whoever picks this up later make an informed decision
+- Which feature or task it was spotted during
+
 ## Observability
 
 ### Logging
