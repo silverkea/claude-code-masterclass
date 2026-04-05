@@ -48,5 +48,5 @@ svg.logo {
   grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 }
 .btn {
-  @apply bg-primary text-dark font-semibold px-4 py-2 rounded-lg hover:bg-secondary transition-colors;
+  @apply inline-flex items-center gap-2 bg-gradient-to-r from-[#9810fa] to-[#e60076] text-white font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition-opacity;
 }
