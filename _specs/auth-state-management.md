@@ -13,7 +13,7 @@ User opens or navigates within the app.
 
 ## Summary
 
-Make the current user's authentication state available across the entire app in real time. Any page or component can know whether a user is logged in, who they are, and whether that information is still loading. The navbar reflects the logged-in user's identity, and the splash page redirects based on auth state.
+Make the current user's authentication state available across the entire app in real time. Any page or component can know whether a user is logged in, who they are, and whether that information is still loading. The navbar reflects the logged-in user's identity. Auth-based page redirects are handled by the route protection layer — see `route-protection.md`.
 
 ## Functional Requirements
 
@@ -21,13 +21,10 @@ Make the current user's authentication state available across the entire app in 
 - Any page or component can access the current logged-in user and whether auth state has finished loading
 - While the auth state is being determined on load, a loading indicator is shown in place of user-specific content
 - The navbar displays the logged-in user's name or identifier when a user is signed in, and shows nothing user-specific when signed out
-- The splash page redirects to the dashboard if a user is logged in, or to the login page if not — only after the auth state has finished loading
 - When auth state changes (e.g. user signs in or out), all affected parts of the app update automatically
 
 ## Success Criteria
 
-- A logged-in user who navigates to the splash page is redirected to the dashboard without seeing a flash of the public page
-- A logged-out user who navigates to the splash page is redirected to the login page
 - The navbar shows the logged-in user's name or identifier while signed in
 - The navbar shows nothing user-specific while signed out
 - A brief loading state is shown while the app determines auth status on first load
@@ -40,8 +37,6 @@ Make the current user's authentication state available across the entire app in 
 
 ## Acceptance Criteria
 
-- Given the user is signed in, when they visit the splash page, they are redirected to the dashboard
-- Given the user is signed out, when they visit the splash page, they are redirected to the login page
 - Given auth state is still loading, user-specific UI shows a placeholder rather than incorrect content
 - Given the user is signed in, the navbar displays their name or identifier
 - Given the user is signed out, the navbar displays no user-specific content

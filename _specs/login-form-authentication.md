@@ -13,7 +13,7 @@ User submits the login form.
 
 ## Summary
 
-Wire the existing login form to the authentication backend. When a registered user submits valid credentials, they are signed in and an inline success message is shown within the form. The form fields clear on success. If credentials are invalid or the request fails, a clear error message is shown inline. No redirect occurs — that is out of scope for this feature.
+Wire the existing login form to the authentication backend. When a registered user submits valid credentials, they are signed in and an inline success message is shown within the form. The form fields clear on success. If credentials are invalid or the request fails, a clear error message is shown inline. The route protection layer (see `route-protection.md`) automatically redirects the newly-signed-in user to the dashboard once auth state updates.
 
 ## Functional Requirements
 
@@ -23,7 +23,7 @@ Wire the existing login form to the authentication backend. When a registered us
 - If the credentials are incorrect, a specific error message is shown inline (e.g. "Incorrect email or password")
 - If login fails for any other reason (e.g. a network or service issue), a generic error message is shown inline
 - The submit button is disabled and shows a loading indicator while the login request is in progress, to prevent duplicate submissions
-- No redirect occurs after login — the page remains as-is with the success or error state shown
+- After a successful login, the route protection layer automatically redirects the user to the dashboard — no explicit redirect is performed by the login form itself
 
 ## Figma Design Reference (only if referenced)
 
@@ -65,7 +65,7 @@ N/A
 - Given invalid credentials, when the user submits the login form, a specific error message is shown inline
 - Given a non-credential failure (e.g. service unavailable), a generic error message is shown inline
 - Given a login is in progress, the submit button is disabled and shows a loading indicator
-- Given any outcome, no redirect occurs — the user stays on the login page
+- Given a successful login, the user is redirected to the dashboard by the route protection layer
 
 ## Related Specs
 
@@ -84,4 +84,3 @@ Create a test file in ./tests for the new feature, covering the following cases:
 - Submitting with invalid credentials shows a specific error message
 - Submitting when the service fails shows a generic error message
 - The submit button is disabled and shows a loading indicator while login is in progress
-- No redirect occurs after login regardless of outcome
