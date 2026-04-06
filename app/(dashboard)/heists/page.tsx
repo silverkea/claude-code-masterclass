@@ -1,8 +1,15 @@
 "use client";
 
 import { useHeists } from "@/hooks/useHeists";
+import { type Heist, type SettledHeist } from "@/types/firestore/heist";
 import HeistCard from "@/components/HeistCard";
 import HeistCardSkeleton from "@/components/HeistCardSkeleton";
+import ExpiredHeistCard from "@/components/ExpiredHeistCard";
+import ExpiredHeistCardSkeleton from "@/components/ExpiredHeistCardSkeleton";
+
+function isSettled(h: Heist): h is SettledHeist {
+  return h.finalStatus !== null;
+}
 
 export default function HeistsPage() {
   const {
@@ -20,6 +27,8 @@ export default function HeistsPage() {
     loading: expiredLoading,
     error: expiredError,
   } = useHeists("expired");
+
+  const settledHeists = expiredHeists.filter(isSettled);
 
   return (
     <div className="page-content">
@@ -43,11 +52,18 @@ export default function HeistsPage() {
       </div>
       <div className="expired-heists">
         <h2>All Expired Heists</h2>
-        {expiredLoading && <p>Loading…</p>}
         {expiredError && <p>Could not load expired heists.</p>}
-        {expiredHeists.map((h) => (
-          <p key={h.id}>{h.title}</p>
-        ))}
+        <div className="heist-list">
+          {expiredLoading ? (
+            Array.from({ length: 3 }, (_, i) => (
+              <ExpiredHeistCardSkeleton key={i} />
+            ))
+          ) : settledHeists.length === 0 ? (
+            <p>No expired heists yet.</p>
+          ) : (
+            settledHeists.map((h) => <ExpiredHeistCard key={h.id} heist={h} />)
+          )}
+        </div>
       </div>
     </div>
   );
