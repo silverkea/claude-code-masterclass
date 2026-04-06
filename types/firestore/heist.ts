@@ -13,6 +13,8 @@ export interface Heist {
   createdAt: Date
 }
 
+export type SettledHeist = Heist & { finalStatus: 'success' | 'failure' }
+
 export interface CreateHeistInput {
   title: string
   description: string
