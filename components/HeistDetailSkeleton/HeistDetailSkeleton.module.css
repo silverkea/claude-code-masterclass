@@ -1,0 +1,63 @@
+@reference "../../app/globals.css";
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.wrap {
+  @apply flex flex-col gap-5;
+}
+
+.titleBlock,
+.descBlock,
+.labelStub,
+.valueStub,
+.unitStub {
+  border-radius: 0.375rem;
+  background-color: #1e2939;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.titleBlock {
+  height: 2rem;
+  width: 60%;
+}
+
+.descBlock {
+  height: 5rem;
+  width: 100%;
+}
+
+.metaRows {
+  @apply flex flex-col gap-3;
+}
+
+.row {
+  @apply flex items-center gap-3;
+}
+
+.labelStub {
+  height: 0.75rem;
+  width: 2.5rem;
+}
+
+.valueStub {
+  height: 0.75rem;
+  width: 8rem;
+}
+
+.countdownBlock {
+  @apply flex items-center gap-3;
+}
+
+.unitStub {
+  height: 5rem;
+  width: 4.5rem;
+  border-radius: 0.5rem;
+}

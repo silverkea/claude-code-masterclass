@@ -1,0 +1,48 @@
+@reference "../../app/globals.css";
+
+.wrap {
+  @apply flex items-center gap-3;
+}
+
+.unit {
+  @apply flex flex-col items-center gap-1 rounded-lg p-3;
+  background-color: var(--color-lighter);
+  border: 1px solid #1e2939;
+  min-width: 4.5rem;
+}
+
+.digit {
+  @apply font-bold text-4xl tabular-nums;
+  color: var(--color-secondary);
+  text-shadow: 0 0 20px rgba(251, 100, 182, 0.4);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+}
+
+.label {
+  @apply text-xs font-semibold tracking-widest uppercase;
+  color: var(--color-body);
+}
+
+.expiredWrap {
+  @apply flex items-center;
+}
+
+.expired {
+  @apply font-bold text-3xl uppercase tracking-widest;
+  color: var(--color-error);
+  text-shadow: 0 0 20px rgba(255, 100, 103, 0.4);
+  letter-spacing: 0.15em;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

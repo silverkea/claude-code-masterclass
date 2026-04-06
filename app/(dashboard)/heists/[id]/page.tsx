@@ -1,7 +1,12 @@
-export default function HeistDetailsPage() {
+import HeistDetail from "@/components/HeistDetail";
+
+export default async function HeistDetailsPage(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await props.params;
   return (
     <div className="page-content">
-      <h2>Heist Details</h2>
+      <HeistDetail id={id} />
     </div>
-  )
+  );
 }
