@@ -1,0 +1,85 @@
+@reference "../../app/globals.css";
+
+.wrap {
+  @apply flex flex-col gap-6;
+}
+
+.title {
+  @apply text-3xl font-bold;
+  color: var(--color-heading);
+}
+
+.description {
+  @apply text-base leading-relaxed whitespace-pre-wrap;
+  color: var(--color-body);
+}
+
+.meta {
+  @apply flex flex-col gap-3;
+}
+
+.row {
+  @apply flex items-center gap-2 text-sm;
+}
+
+.label {
+  color: var(--color-body);
+}
+
+.assignee {
+  color: var(--color-primary);
+  @apply font-medium;
+}
+
+.creator {
+  color: var(--color-secondary);
+  @apply font-medium;
+}
+
+.assigneeWrap {
+  @apply relative flex-1 max-w-xs;
+}
+
+.input {
+  @apply bg-lighter text-heading rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary transition-all text-sm;
+}
+
+.dropdown {
+  @apply absolute z-10 w-full mt-1 bg-lighter rounded-lg overflow-hidden;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(194, 122, 255, 0.2);
+}
+
+.dropdownItem {
+  @apply w-full text-left text-heading text-sm px-4 py-2 bg-transparent border-none cursor-pointer;
+  transition: background-color 0.15s ease;
+}
+
+.dropdownItem:hover {
+  @apply bg-light;
+}
+
+.pendingWrap {
+  @apply flex flex-col gap-2;
+}
+
+.selectedAssignee {
+  @apply flex items-center gap-2 bg-lighter text-heading rounded-lg px-4 py-2 text-sm w-fit;
+  border: 1px solid rgba(194, 122, 255, 0.2);
+}
+
+.clearBtn {
+  @apply bg-transparent border-none text-body cursor-pointer text-lg leading-none;
+  transition: color 0.15s ease;
+}
+
+.clearBtn:hover {
+  @apply text-heading;
+}
+
+.error {
+  @apply text-sm;
+  color: var(--color-error);
+}
