@@ -1,6 +1,8 @@
 "use client";
 
 import { useHeists } from "@/hooks/useHeists";
+import HeistCard from "@/components/HeistCard";
+import HeistCardSkeleton from "@/components/HeistCardSkeleton";
 
 export default function HeistsPage() {
   const {
@@ -23,19 +25,21 @@ export default function HeistsPage() {
     <div className="page-content">
       <div className="active-heists">
         <h2>Your Active Heists</h2>
-        {activeLoading && <p>Loading…</p>}
         {activeError && <p>Could not load active heists.</p>}
-        {activeHeists.map((h) => (
-          <p key={h.id}>{h.title}</p>
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {activeLoading
+            ? Array.from({ length: 3 }, (_, i) => <HeistCardSkeleton key={i} />)
+            : activeHeists.map((h) => <HeistCard key={h.id} heist={h} />)}
+        </div>
       </div>
       <div className="assigned-heists">
         <h2>Heists You&apos;ve Assigned</h2>
-        {assignedLoading && <p>Loading…</p>}
         {assignedError && <p>Could not load assigned heists.</p>}
-        {assignedHeists.map((h) => (
-          <p key={h.id}>{h.title}</p>
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {assignedLoading
+            ? Array.from({ length: 3 }, (_, i) => <HeistCardSkeleton key={i} />)
+            : assignedHeists.map((h) => <HeistCard key={h.id} heist={h} />)}
+        </div>
       </div>
       <div className="expired-heists">
         <h2>All Expired Heists</h2>
