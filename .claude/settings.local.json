@@ -24,7 +24,8 @@
       "Bash(node -e ':*)",
       "Bash(xargs grep:*)",
       "mcp__figma-desktop__get_metadata",
-      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")"
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
+      "Skill(plan)"
     ]
   }
 }
