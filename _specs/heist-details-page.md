@@ -30,6 +30,7 @@ Provide a dedicated detail page for a single heist, accessible to any authentica
 - If no heist document exists for the given ID, the page renders a standard 404 experience
 - The page is accessible to any authenticated user regardless of whether they created or were assigned to the heist
 - The page subscribes to real-time updates — if the heist document changes while the user is on the page, the displayed data updates automatically without a reload
+- While the heist data is loading, a skeleton version of the page is displayed that mirrors the layout of the loaded state — placeholder blocks replace the title, description, metadata fields, and countdown area
 
 ## Success Criteria
 
@@ -37,13 +38,13 @@ Provide a dedicated detail page for a single heist, accessible to any authentica
 - The countdown is visually striking and clearly communicates urgency
 - When the deadline has passed, the countdown area shows "Expired" instead of a negative or zero value
 - If the user navigates to a URL with a non-existent heist ID, a 404 page is displayed
+- While data is loading, a skeleton layout is displayed that matches the structure of the loaded page
 - If the heist data changes in the background (e.g. an assignee is added), the page reflects the update without requiring a reload
 
 ## Out of Scope
 
 - Any actions on the page such as marking a heist as complete, reassigning, editing, or deleting
 - Access control beyond authentication — any logged-in user can view any heist
-- A loading skeleton for the detail page (a simple loading state is sufficient)
 - Comments, activity history, or audit trails
 - Sharing or exporting heist details
 - Pagination or navigation between heists (next/previous)
@@ -74,6 +75,7 @@ Provide a dedicated detail page for a single heist, accessible to any authentica
 
 ## Acceptance Criteria
 
+- Given the heist data is still loading, the page displays a skeleton layout that mirrors the structure of the loaded page
 - Given a logged-in user navigates to `/heists/:id` for a valid heist, the page displays the heist's title, description, assignee codename (or "Unassigned"), and creator codename
 - Given the heist's deadline is in the future, the page shows a live countdown that visibly ticks down every second
 - Given the heist's deadline is in the past, the page shows an "Expired" indicator in place of the countdown
@@ -107,5 +109,5 @@ Create test file(s) in `./tests` for the new page and any new components, coveri
 - Countdown is rendered when the deadline is in the future
 - "Expired" indicator is rendered when the deadline is in the past
 - Countdown transitions to "Expired" when the deadline passes during a live session (time-based test)
-- A loading state is shown before the data subscription resolves
+- A skeleton layout matching the page structure is shown before the data subscription resolves
 - A 404 experience is shown when the heist document does not exist
