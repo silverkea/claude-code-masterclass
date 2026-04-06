@@ -15,7 +15,7 @@ export default function Home() {
           P<Clock8 className={styles.logoIcon} strokeWidth={2.75} />
           cket Heist
         </h1>
-        <p className={styles.tagline}>Your office. Their problem.</p>
+        <p className={styles.tagline}>Their office. Your problem to solve.</p>
         <p className={styles.description}>
           Recruit your crew, plan your moves, and pull off the perfect office
           heist. No vaults required.
