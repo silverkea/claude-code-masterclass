@@ -1,0 +1,49 @@
+@reference "../../app/globals.css";
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.card {
+  @apply bg-lighter rounded-[10px] border p-4 flex flex-col gap-2;
+  border-color: #1e2939;
+}
+
+.header {
+  @apply flex items-start justify-between gap-2;
+}
+
+.lineTitle,
+.lineBadge,
+.lineShort {
+  border-radius: 0.375rem;
+  background-color: #1e2939;
+  height: 0.75rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.lineTitle {
+  width: 70%;
+  height: 0.875rem;
+}
+
+.lineBadge {
+  width: 4rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+.row {
+  @apply flex items-center gap-4;
+}
+
+.lineShort {
+  width: 35%;
+}

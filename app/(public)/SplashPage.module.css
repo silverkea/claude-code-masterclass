@@ -1,0 +1,127 @@
+@reference "../globals.css";
+
+.splash {
+  position: relative;
+  min-height: 100lvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Subtle planning-grid overlay — a nod to the heist theme */
+.splash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(194, 122, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 122, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 42%, rgba(152, 16, 250, 0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 30% at 68% 58%, rgba(230, 0, 118, 0.1) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 44rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wordmark {
+  font-size: clamp(2.75rem, 9vw, 5rem) !important;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.logoIcon {
+  display: inline-block;
+  width: 0.82em;
+  height: 0.82em;
+  color: #C27AFF;
+  margin: 0 0.04em;
+}
+
+.tagline {
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #C27AFF 0%, #FB64B6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+
+.description {
+  @apply text-body;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  max-width: 28rem;
+  margin: 0.25rem 0;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+
+.actions {
+  display: flex;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+  animation: fadeUp 0.5s 0.3s ease both;
+}
+
+.joinBtn {
+  @apply bg-gradient-to-r from-[#9810fa] to-[#e60076] text-white font-semibold rounded-lg;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  transition: opacity 0.15s ease;
+}
+
+.joinBtn:hover {
+  opacity: 0.88;
+}
+
+.loginBtn {
+  @apply text-primary font-semibold rounded-lg;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  border: 1px solid rgba(194, 122, 255, 0.3);
+  background: transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.loginBtn:hover {
+  background: rgba(194, 122, 255, 0.08);
+  border-color: rgba(194, 122, 255, 0.55);
+}

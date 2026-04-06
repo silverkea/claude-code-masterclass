@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(git init)",
+      "Bash(git switch:*)",
+      "Bash(npx vitest:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "mcp__figma-desktop__get_design_context",
+      "mcp__figma-desktop__get_screenshot",
+      "mcp__firebase__firebase_list_projects",
+      "mcp__firebase__firebase_login",
+      "mcp__firebase__firebase_get_environment",
+      "mcp__firebase__firebase_create_project",
+      "mcp__firebase__firebase_update_environment",
+      "mcp__firebase__firebase_create_app",
+      "mcp__firebase__firebase_read_resources",
+      "Bash(npx firebase-tools:*)",
+      "mcp__firebase__firebase_list_apps",
+      "Bash(npm view:*)",
+      "mcp__firebase__firebase_get_sdk_config",
+      "Bash(npm i:*)",
+      "Bash(node -e ':*)",
+      "Bash(xargs grep:*)",
+      "mcp__figma-desktop__get_metadata",
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
+      "Skill(plan)"
+    ]
+  }
+}

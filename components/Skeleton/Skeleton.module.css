@@ -1,0 +1,43 @@
+@reference "../../app/globals.css";
+
+.card {
+  @apply bg-light rounded-xl p-6 w-full max-w-lg;
+}
+
+.header {
+  @apply flex items-center gap-4 mb-6;
+}
+
+.avatar {
+  @apply bg-lighter rounded-full shrink-0;
+  width: 4rem;
+  height: 4rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.headerLines {
+  @apply flex flex-col gap-3 flex-1;
+}
+
+.body {
+  @apply flex flex-col gap-3;
+}
+
+.lineLong,
+.lineMid,
+.lineFull,
+.lineShort {
+  @apply bg-lighter rounded-md;
+  height: 0.75rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.lineLong  { width: 65%; }
+.lineMid   { width: 45%; }
+.lineFull  { width: 100%; }
+.lineShort { width: 55%; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}

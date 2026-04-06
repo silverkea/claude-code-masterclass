@@ -1,0 +1,55 @@
+@reference "../../app/globals.css";
+
+.card {
+  position: relative;
+  @apply bg-lighter rounded-[10px] border p-4 flex flex-col gap-3;
+  border-color: #1e2939;
+}
+
+.header {
+  @apply flex items-start justify-between gap-2;
+}
+
+.title {
+  @apply text-heading font-semibold text-sm leading-snug;
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.clock {
+  color: var(--color-body);
+  @apply shrink-0;
+}
+
+.clockUrgent {
+  color: var(--color-secondary);
+  @apply shrink-0;
+}
+
+.row {
+  @apply flex items-center gap-1 text-sm;
+}
+
+.label {
+  @apply text-body;
+}
+
+.assignee {
+  color: var(--color-primary);
+}
+
+.creator {
+  color: var(--color-secondary);
+}
+
+.muted {
+  @apply text-body text-xs;
+}
+
+.meta {
+  @apply flex items-center;
+}

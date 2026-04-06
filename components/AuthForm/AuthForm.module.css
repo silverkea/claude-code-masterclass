@@ -1,0 +1,37 @@
+@reference "../../app/globals.css";
+
+.form {
+  @apply flex flex-col gap-4 w-full max-w-sm mx-auto;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.label {
+  @apply text-body text-sm font-medium;
+}
+
+.inputWrap {
+  @apply relative flex items-center;
+}
+
+.input {
+  @apply bg-lighter text-heading rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary transition-all;
+}
+
+.toggle {
+  @apply absolute right-2 bg-transparent border-none text-body cursor-pointer p-1 flex items-center;
+}
+
+.switchLink {
+  @apply text-body text-sm text-center hover:text-primary transition-colors;
+}
+
+.error {
+  @apply text-error text-sm;
+}
+
+.success {
+  @apply text-success text-sm;
+}

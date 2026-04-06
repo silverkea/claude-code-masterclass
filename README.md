@@ -1,5 +1,19 @@
-# Claude-Code-Masterclass
-All the course files for the Claude Code Masterclass on NetNinja.dev
+# Pocket Heist
 
-## Starter Project
-To download the starter project, select the starter-project branch from the branch dropdown. Then click the 'Code' button, and download a zip of the project. Unzip, and open in your editor of choice.
+Starter project for the Claude Code Masterclass.
+
+## Getting Started
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the app.
