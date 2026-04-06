@@ -1,7 +1,7 @@
 ---
 description: Create a feature spec file and branch from a short idea
 argument-hint: "[Short feature description, optional: 'figma: <component-link>']"
-allowed-tools: Read, Write, Glob, Grep, Bash(git switch:*), Bash(git status:*), Bash(git branch:*), Bash(git rm:*)
+allowed-tools: Read, Write, Glob, Grep, Bash(git switch:*), Bash(git status:*), Bash(git branch:*), Bash(git rm:*), Agent
 ---
 
 You are helping to spin up a new feature spec for this application, from a short idea provided in the user input below. Always adhere to any rules or requirements set out in any CLAUDE.md files when responding.
@@ -65,20 +65,14 @@ If you cannot infer a sensible `feature_title` and `feature_slug`, ask the user 
 
 ## Step 3. Pull Figma context when needed
 
-If `figma_hint` is present and Figma MCP tools are available:
+If `figma_hint` is present:
 
-1. Use the Figma MCP tools to locate the component, layer or frame.
-2. Extract only information that is useful for implementation, such as:
-   - Dimensions and layout (grid, spacing, alignment)
-   - Key typography tokens (font family, size, weight)
-   - Color tokens and semantic usage (primary, surface, border, error etc.)
-   - Border radius, shadows, and any notable visual detail
-   - Icons, buttons, links or other UI elements
-3. Summarise this as 3 to 8 concise bullet points and also leave a link to the figma component for future lookups
-4. If lookup fails or the tools are not available, record a note like:
+1. Launch the `figma-design-extractor` agent with the Figma link from `figma_hint` and the feature title as context. The agent will inspect the design and return a structured design brief.
+2. From the brief returned by the agent, extract the key points relevant to the spec (dimensions, colour tokens, typography, states, accessibility notes) and include them as 3 to 8 concise bullet points in the spec's design reference section. Also record a link to the Figma component for future lookups.
+3. If the agent fails or the design cannot be retrieved, record a note:
    - `"Design reference could not be retrieved. See Figma manually for details"`
 
-Always summarise into human friendly notes.
+Always summarise into human friendly notes — do not paste the raw agent output verbatim into the spec.
 
 ## Step 4. Clarification questions
 
