@@ -113,10 +113,13 @@ Before making any content, switch to a new Git branch using the `branch_name` de
 Read the existing files in `_specs/` to:
 - Calibrate the tone, depth, and level of detail used in this project — match that style in the new spec
 - Check whether any existing spec covers behaviour that overlaps with or is superseded by this new feature. If so, note this explicitly in the new spec under a `## Related Specs` section, and flag to the user in the final output that those specs may need updating.
-- Look for **behavioural inconsistencies** between related features that are *not* being changed by this feature (e.g. one feature redirects on success, a parallel feature does not). For each inconsistency spotted, ask the user **one at a time** with a question that includes: what the inconsistency is, why it could matter to users or the codebase, and what the suggested resolution might be — so the user has enough context to decide whether it's worth capturing. Example: "I noticed that signup redirects to the dashboard on success, but login (this feature) shows an inline message and stays on the page. This means returning users have a different post-authentication experience than new users. Possible resolutions include: aligning login to redirect like signup, aligning signup to show an inline message like login, or leaving them intentionally different if the product requires distinct post-auth flows. Would you like to capture this in the backlog?" If yes, create a backlog file named `yyyymmdd-<slug>.md` in `_backlog/` following the format in CLAUDE.md. If no, move on.
+- Look for **behavioural inconsistencies** between related features that are *not* being changed by this feature. For each inconsistency spotted, ask the user **one at a time** with a question that includes: what the inconsistency is, why it could matter, and what the suggested resolution might be. If the user wants to capture it, create a backlog file following the format in @.claude/commands/backlog.md. If no, move on.
 
 **6b. Write the draft**
-Create a markdown spec document using the exact structure defined in: @_specs/template.md
+Create a markdown spec document using the exact structure defined in: @.claude/references/spec-template.md
+
+When populating **Security Considerations**, use: @.claude/references/security-checklist.md
+When populating **Observability**, use: @.claude/references/observability-checklist.md
 
 The spec must stay at the **functional and non-functional requirements** level — it describes *what* the feature does and *why*, from a user and product perspective. It is not a technical document.
 
